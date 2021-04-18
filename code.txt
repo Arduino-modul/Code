@@ -1,0 +1,173 @@
+int latchPin = 11;
+int clockPin = 9;
+int dataPin = 12; 
+
+byte data;
+byte dataArray[6];
+
+void setup() {
+
+  pinMode(latchPin, OUTPUT);
+
+  Serial.begin(9600);
+
+  dataArray[0] = 0xFF;
+
+  dataArray[1] = 0xFE;
+
+  dataArray[2] = 0xFC;
+
+  dataArray[3] = 0xF8; 
+
+  dataArray[4] = 0xF0; 
+
+  dataArray[5] = 0xE0;
+
+  blinkAll_2Bytes(2,500);
+}
+
+void loop() {
+
+  for (int j = 0; j < 8; j++) {
+
+    data = dataArray[j];
+
+    digitalWrite(latchPin, 0);
+
+    shiftOut(dataPin, clockPin, data);
+
+    digitalWrite(latchPin, 1);
+
+    delay(300);
+
+  }
+}
+
+void shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
+  
+  int i=0;
+
+  int pinState;
+
+  pinMode(myClockPin, OUTPUT);
+
+  pinMode(myDataPin, OUTPUT);
+
+  digitalWrite(myDataPin, 0);
+
+  digitalWrite(myClockPin, 0);
+
+    digitalWrite(myClockPin, 0);
+
+    if ( myDataOut & (1<<6) ) {
+
+      pinState= 1;
+
+    }
+
+    else {
+
+      pinState= 0;
+
+    }
+
+    digitalWrite(myDataPin, pinState);
+
+    digitalWrite(myClockPin, 1);
+
+    digitalWrite(myDataPin, 0);
+
+  digitalWrite(myClockPin, 0);
+}
+
+void blinkAll_2Bytes(int n, int d) {
+
+  digitalWrite(latchPin, 0);
+
+  shiftOut(dataPin, clockPin, 0);
+
+  shiftOut(dataPin, clockPin, 0);
+
+  digitalWrite(latchPin, 1);
+
+  delay(200);
+
+  for (int x = 0; x < n; x++) {
+
+    digitalWrite(latchPin, 0);
+
+    shiftOut(dataPin, clockPin, 255);
+
+    shiftOut(dataPin, clockPin, 255);
+
+    digitalWrite(latchPin, 1);
+
+    delay(d);
+
+    digitalWrite(latchPin, 0);
+
+    shiftOut(dataPin, clockPin, 0);
+
+    shiftOut(dataPin, clockPin, 0);
+
+    digitalWrite(latchPin, 1);
+
+    delay(d);
+  }
+}
+
+
+// 2nd version
+/*
+int tDelay = 100;
+int latchPin = 11;      
+int clockPin = 9;     
+int dataPin = 12;    
+
+byte leds = 0;
+
+
+void updateShiftRegister()
+{
+   digitalWrite(latchPin, LOW);
+   shiftOut(dataPin, clockPin, LSBFIRST, leds); 
+   digitalWrite(latchPin, HIGH);
+}
+void updateShiftRegister2() 
+{ 
+   digitalWrite(latchPin, HIGH);
+   shiftOut(dataPin, clockPin, LSBFIRST, leds);
+   digitalWrite(latchPin, LOW);
+}
+
+void setup() 
+{
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);  
+  pinMode(clockPin, OUTPUT);
+   Serial.begin(9600);
+}
+   
+void loop() 
+{
+   leds = 0;
+  updateShiftRegister();
+    
+    for (int i = 2; i < 9; i++)
+  {
+    delay(tDelay);
+    bitSet(leds, i); 
+    updateShiftRegister(); 
+   }
+     
+      for (int i = 2; i < 8; i++)
+  {
+	
+    bitClear(leds, i); 
+    updateShiftRegister2();
+    delay(tDelay);   
+  }
+  
+}
+
+*/
