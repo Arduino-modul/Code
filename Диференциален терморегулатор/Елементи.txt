@@ -1,0 +1,9 @@
+U2    -	1 -	Arduino Uno R3
+U1    -	1 -	LCD 16 x 2
+R5,R3 -	2 -	220 Ω Resistor
+Rpot1 -	1 -	50 Ω Potentiometer
+K1    -	1 -	Relay SPDT
+U3,U4 - 2 -	Temperature Sensor [TMP36]
+D1    -	1 -	Red LED
+R2    -	1 -	100 Ω Resistor
+S1    -	1 -	Pushbutton
